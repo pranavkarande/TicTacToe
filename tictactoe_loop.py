@@ -1,25 +1,24 @@
-while(True):
+while (True):
     import random
 
-    print("Welcome to Tic-Tac-Toe.")
+    print ("Welcome to Tic-Tac-Toe.")
     xoro = input("Do you want X or O: ").capitalize()
-    print("Your turn first.")
+    print ("Your turn first.")
 
     board = [" ", " ", " ", " ", " ", " ", " ", " ", " "]
 
     # function to print the board
     def print_board():
-        b = """ 
-              A    B    C
+        b = """
+                A    B    C
 
-        1     {} |  {}  | {}
-            ----+-----+----
-        2     {} |  {}  | {}
-            ----+-----+----
-        3     {} |  {}  | {}
+          1     {} |  {}  | {}
+              ----+-----+----
+          2     {} |  {}  | {}
+              ----+-----+----
+          3     {} |  {}  | {}
             """
-        print(b.format(board[0], board[1], board[2], board[3],
-                    board[4], board[5], board[6], board[7], board[8]))
+        print(b.format(board[0], board[1], board[2], board[3], board[4], board[5], board[6], board[7], board[8]))
 
     # function which checks status of board and returns:
     # "X" if X has won
@@ -54,9 +53,9 @@ while(True):
             return ("X")
 
     # function which returns int if the given triplet has just one empty square
-    def check_three(a, b, c, d):
-        l = [board[a], board[b], board[c]]
-        k = [a, b, c]
+    def check_three(a,b,c,d):
+        l = [board[a],board[b],board[c]]
+        k = [a,b,c]
         if ((l.count(d) == 2) & (l.count(" ") == 1)):
             return (k[l.index(" ")])
 
@@ -65,38 +64,46 @@ while(True):
     # second priority is to save completion of enemy triad
     # third choice is random move
     def next_move():
-        if (type(check_three(0, 1, 2, switch())) == int):
-            return (check_three(0, 1, 2, switch()))
-        elif (type(check_three(3, 4, 5, switch())) == int):
-            return (check_three(3, 4, 5, switch()))
-        elif (type(check_three(6, 7, 8, switch())) == int):
-            return (check_three(6, 7, 8, switch()))
-        elif (type(check_three(0, 3, 6, switch())) == int):
-            return (check_three(0, 3, 6, switch()))
-        elif (type(check_three(1, 4, 7, switch())) == int):
-            return (check_three(1, 4, 7, switch()))
-        elif (type(check_three(2, 5, 8, switch())) == int):
-            return (check_three(2, 5, 8, switch()))
-        elif (type(check_three(0, 4, 8, switch())) == int):
-            return (check_three(0, 4, 8, switch()))
-        elif (type(check_three(2, 4, 6, switch())) == int):
-            return (check_three(2, 4, 6, switch()))
-        elif (type(check_three(0, 1, 2, xoro)) == int):
-            return (check_three(0, 1, 2, xoro))
-        elif (type(check_three(3, 4, 5, xoro)) == int):
-            return (check_three(3, 4, 5, xoro))
-        elif (type(check_three(6, 7, 8, xoro)) == int):
-            return (check_three(6, 7, 8, xoro))
-        elif (type(check_three(0, 3, 6, xoro)) == int):
-            return (check_three(0, 3, 6, xoro))
-        elif (type(check_three(1, 4, 7, xoro)) == int):
-            return (check_three(1, 4, 7, xoro))
-        elif (type(check_three(2, 5, 8, xoro)) == int):
-            return (check_three(2, 5, 8, xoro))
-        elif (type(check_three(0, 4, 8, xoro)) == int):
-            return (check_three(0, 4, 8, xoro))
-        elif (type(check_three(2, 4, 6, xoro)) == int):
-            return (check_three(2, 4, 6, xoro))
+        # logic to complete triplet first
+        if (type(check_three(0,1,2,switch())) == int):
+            return (check_three(0,1,2,switch()))
+        elif (type(check_three(3,4,5,switch())) == int):
+            return (check_three(3,4,5,switch()))
+        elif (type(check_three(6,7,8,switch())) == int):
+            return (check_three(6,7,8,switch()))
+        elif (type(check_three(0,3,6,switch())) == int):
+            return (check_three(0,3,6,switch()))
+        elif (type(check_three(1,4,7,switch())) == int):
+            return (check_three(1,4,7,switch()))
+        elif (type(check_three(2,5,8,switch())) == int):
+            return (check_three(2,5,8,switch()))
+        elif (type(check_three(0,4,8,switch())) == int):
+            return (check_three(0,4,8,switch()))
+        elif (type(check_three(2,4,6,switch())) == int):
+            return (check_three(2,4,6,switch()))
+        # logic to avoid enemy triplet second
+        elif (type(check_three(0,1,2,xoro)) == int):
+            return (check_three(0,1,2, xoro))
+        elif (type(check_three(3,4,5,xoro)) == int):
+            return (check_three(3,4,5,xoro))
+        elif (type(check_three(6,7,8,xoro)) == int):
+            return (check_three(6,7,8,xoro))
+        elif (type(check_three(0,3,6,xoro)) == int):
+            return (check_three(0,3,6,xoro))
+        elif (type(check_three(1,4,7,xoro)) == int):
+            return (check_three(1,4,7,xoro))
+        elif (type(check_three(2,5,8,xoro)) == int):
+            return (check_three(2,5,8,xoro))
+        elif (type(check_three(0,4,8,xoro)) == int):
+            return (check_three(0,4,8,xoro))
+        elif (type(check_three(2,4,6,xoro)) == int):
+            return (check_three(2,4,6,xoro))
+        # logic for special case of first corner move
+        elif (([board[0], board[2], board[6], board[8]].count(xoro) == 1) & ([board[1], board[3], board[4], board[5], board[7]].count(" ") == 5)):
+            return (4)
+
+        # Space for adding logic
+
         else:
             l = []
             for i in range(len(board)):
@@ -125,7 +132,6 @@ while(True):
         if(a == "C3"):
             return(8)
 
-
     # main loop starts
     while (True):
         print_board()
@@ -136,7 +142,7 @@ while(True):
             break
         elif (check_board() == xoro):
             print_board()
-            print("Congratulations! You won :)")
+            print ("Congratulations! You won :)")
             break
         board[next_move()] = switch()
         if (check_board() == switch()):

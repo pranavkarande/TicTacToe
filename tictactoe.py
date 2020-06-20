@@ -1,8 +1,14 @@
 import random
 
+print ("Welcome to Tic-Tac-Toe.")
+xoro = input("Do you want X or O: ").capitalize()
+print ("Your turn first.")
+
 board = [" ", " ", " ", " ", " ", " ", " ", " ", " "]
-def print_board(lst):
-    b = """ 
+
+# function to print the board
+def print_board():
+    b = """
             A    B    C
 
       1     {} |  {}  | {}
@@ -11,137 +17,134 @@ def print_board(lst):
           ----+-----+----
       3     {} |  {}  | {}
         """
-    print(b.format(lst[0], lst[1], lst[2], lst[3], lst[4], lst[5], lst[6], lst[7], lst[8]))
+    print(b.format(board[0], board[1], board[2], board[3], board[4], board[5], board[6], board[7], board[8]))
 
-def ask_move(j):
-    print_board(board)
-    i = input("It is " + xoro + "'s chance. Enter your choice: ")
-    i = i.capitalize()
-    if (i == "A1"):
-        board[0] = j
-    if (i == "B1"):
-        board[1] = j
-    if (i == "C1"):
-        board[2] = j
-    if (i == "A2"):
-        board[3] = j
-    if (i == "B2"):
-        board[4] = j
-    if (i == "C2"):
-        board[5] = j
-    if (i == "A3"):
-        board[6] = j
-    if (i == "B3"):
-        board[7] = j
-    if (i == "C3"):
-        board[8] = j
+# function which checks status of board and returns:
+# "X" if X has won
+# "O" if O has won
+# "tie" if game is a tie
+# 0 if game can continue
+def check_board():
+    if ((board[0] == board[1] == board[2] == "X") or (board[0] == board[1] == board[2] == "O")):
+        return(board[0])
+    elif ((board[3] == board[4] == board[5] == "X") or (board[3] == board[4] == board[5] == "O")):
+        return(board[3])
+    elif ((board[6] == board[7] == board[8] == "X") or (board[6] == board[7] == board[8] == "O")):
+        return(board[6])
+    elif ((board[0] == board[3] == board[6] == "X") or (board[0] == board[3] == board[6] == "O")):
+        return(board[0])
+    elif ((board[1] == board[4] == board[7] == "X") or (board[1] == board[4] == board[7] == "O")):
+        return(board[1])
+    elif ((board[2] == board[5] == board[8] == "X") or (board[2] == board[5] == board[8] == "O")):
+        return(board[2])
+    elif ((board[0] == board[4] == board[8] == "X") or (board[0] == board[4] == board[8] == "O")):
+        return(board[0])
+    elif ((board[6] == board[4] == board[2] == "X") or (board[6] == board[4] == board[2] == "O")):
+        return(board[6])
+    elif (" " not in board):
+        return(0)
 
-def switch(k):
-    if (k == "X"):
+# function to return opposite character of whatever the player has chosen
+def switch():
+    if (xoro == "X"):
         return("O")
+    if (xoro == "O"):
+        return ("X")
+
+# function which returns int if the given triplet has just one empty square
+def check_three(a,b,c,d):
+    l = [board[a],board[b],board[c]]
+    k = [a,b,c]
+    if ((l.count(d) == 2) & (l.count(" ") == 1)):
+        return (k[l.index(" ")])
+
+# function which return the recommended move
+# first priority is to complete triad and win
+# second priority is to save completion of enemy triad
+# third choice is random move
+def next_move():
+    # logic to complete triplet first
+    if (type(check_three(0,1,2,switch())) == int):
+        return (check_three(0,1,2,switch()))
+    elif (type(check_three(3,4,5,switch())) == int):
+        return (check_three(3,4,5,switch()))
+    elif (type(check_three(6,7,8,switch())) == int):
+        return (check_three(6,7,8,switch()))
+    elif (type(check_three(0,3,6,switch())) == int):
+        return (check_three(0,3,6,switch()))
+    elif (type(check_three(1,4,7,switch())) == int):
+        return (check_three(1,4,7,switch()))
+    elif (type(check_three(2,5,8,switch())) == int):
+        return (check_three(2,5,8,switch()))
+    elif (type(check_three(0,4,8,switch())) == int):
+        return (check_three(0,4,8,switch()))
+    elif (type(check_three(2,4,6,switch())) == int):
+        return (check_three(2,4,6,switch()))
+    # logic to avoid enemy triplet second
+    elif (type(check_three(0,1,2,xoro)) == int):
+        return (check_three(0,1,2, xoro))
+    elif (type(check_three(3,4,5,xoro)) == int):
+        return (check_three(3,4,5,xoro))
+    elif (type(check_three(6,7,8,xoro)) == int):
+        return (check_three(6,7,8,xoro))
+    elif (type(check_three(0,3,6,xoro)) == int):
+        return (check_three(0,3,6,xoro))
+    elif (type(check_three(1,4,7,xoro)) == int):
+        return (check_three(1,4,7,xoro))
+    elif (type(check_three(2,5,8,xoro)) == int):
+        return (check_three(2,5,8,xoro))
+    elif (type(check_three(0,4,8,xoro)) == int):
+        return (check_three(0,4,8,xoro))
+    elif (type(check_three(2,4,6,xoro)) == int):
+        return (check_three(2,4,6,xoro))
+    # logic for special case of first corner move
+    elif (([board[0], board[2], board[6], board[8]].count(xoro) == 1) & ([board[1], board[3], board[4], board[5], board[7]].count(" ") == 5)):
+        return (4)
+
+    # Space for adding logic
+
     else:
-        return("X")
+        l = []
+        for i in range(len(board)):
+            if(board[i] == " "):
+                l.append(i)
+        return(random.choice(l))
 
-print("Welcome to Tic-Tac-Toe!")
-print("Your turn first.")
-xoro = input("Do you want X or O: ").capitalize()
+# function to conver user input to the board list index
+def convert(a):
+    if(a == "A1"):
+        return(0)
+    if(a == "B1"):
+        return(1)
+    if(a == "C1"):
+        return(2)
+    if(a == "A2"):
+        return(3)
+    if(a == "B2"):
+        return(4)
+    if(a == "C2"):
+        return(5)
+    if(a == "A3"):
+        return(6)
+    if(a == "B3"):
+        return(7)
+    if(a == "C3"):
+        return(8)
 
-def checkgame(lst):
-    if (lst[0] == lst[1] == lst[2] == xoro):
-        return(xoro)
-    elif (lst[3] == lst[4] == lst[5] == xoro):
-        return(xoro)
-    elif (lst[6] == lst[7] == lst[8] == xoro):
-        return(xoro)
-    elif (lst[0] == lst[3] == lst[6] == xoro):
-        return(xoro)
-    elif (lst[1] == lst[4] == lst[7] == xoro):
-        return(xoro)
-    elif (lst[2] == lst[5] == lst[8] == xoro):
-        return(xoro)
-    elif (lst[0] == lst[4] == lst[8] == xoro):
-        return(xoro)
-    elif (lst[6] == lst[4] == lst[2] == xoro):
-        return(xoro)
-    elif (" " in lst == False):
-        return("tie")
-
-def checkrow(a,b,c):
-    o = 0
-    if ((board[a] == board[b] == xoro) & (board[c] == " ")):
-        return(c)
-        o = 1
-    elif ((board[b] == board[c] == xoro) & (board[a] == " ") & (o == 0)):
-        return(a)
-        o = 1
-    elif ((board[a] == board[c] == xoro) & (board[b] == " ") & (o == 0)):
-        return(b)
-        o = 1
-    elif ((board[a] == board[b] == switch(xoro)) & (board[c] == " ") & (o == 0)):
-        return(c)
-        o = 1
-    elif ((board[b] == board[c] == switch(xoro)) & (board[a] == " ") & (o == 0)):
-        return(a)
-        o = 1
-    elif ((board[a] == board[c] == switch(xoro)) & (board[b] == " ") & (o == 0)):
-        return(b)
-
-def nextmove():
-    if (type(checkrow(0,1,2)) == int):
-        board[checkrow(0,1,2)] = xoro
-        return("done")
-    elif (type(checkrow(3,4,5)) == int):
-        board[checkrow(3,4,5)] = xoro
-        return("done")
-    elif (type(checkrow(6,7,8)) == int):
-        board[checkrow(6,7,8)] = xoro
-        return("done")
-    elif (type(checkrow(0,3,6)) == int):
-        board[checkrow(0,3,6)] = xoro
-        return("done")
-    elif (type(checkrow(1,4,7)) == int):
-        board[checkrow(1,4,7)] = xoro
-        return("done")
-    elif (type(checkrow(2,5,8)) == int):
-        board[checkrow(2,5,8)] = xoro
-        return("done")
-    elif (type(checkrow(0,4,8)) == int):
-        board[checkrow(0,4,8)] = xoro
-        return("done")
-    elif (type(checkrow(2,4,6)) == int):
-        board[checkrow(2,4,6)] = xoro
-        return("done")
-
-def rad():
-    l = []
-    for i in range(9):
-        if (board[i] == " "):
-            l.append(i)
-    if(len(l) > 0):
-        board[random.choice(l)] = xoro
-
-
-
+# main loop starts
 while (True):
-    ask_move(xoro)
-    if (checkgame(board) == xoro):
-        print_board(board)
-        print(xoro, "has won!")
+    print_board()
+    board[convert(input("Enter your choice: ").capitalize())] = xoro
+    if (check_board() == 0):
+        print_board()
+        print("It's a tie! :|")
         break
-    elif (checkgame(board) == "tie"):
-        print("Tie!")
+    elif (check_board() == xoro):
+        print_board()
+        print ("Congratulations! You won :)")
         break
-    xoro = switch(xoro)
-    k = nextmove()
-    if (k != "done"):
-        rad()
-
-    if(checkgame(board) == xoro):
-        print_board(board)
-        print(xoro, "has won!")
+    board[next_move()] = switch()
+    if (check_board() == switch()):
+        print_board()
+        print("You lost :(")
         break
-    elif(checkgame(board) == "tie"):
-        print("Tie!")
-        break
-    else:
-        xoro = switch(xoro)
