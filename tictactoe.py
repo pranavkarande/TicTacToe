@@ -6,10 +6,8 @@ print("Your turn first.")
 
 board = [" ", " ", " ", " ", " ", " ", " ", " ", " "]
 
-# function to print the board
 
-
-def print_board():
+def print_board():      # function to print the board
     b = """
             A    B    C
 
@@ -58,16 +56,62 @@ def switch():
     if (xoro == "O"):
         return ("X")
 
-# function which returns int if the given triplet has just one empty square
 
-
-def check_three(a, b, c, d):
+def check_three(a, b, c, d):    # function which returns int if the given triplet has just one empty square
     l = [board[a], board[b], board[c]]
     k = [a, b, c]
     if ((l.count(d) == 2) & (l.count(" ") == 1)):
         return (k[l.index(" ")])
 
+
+def free_squares(k):     # function which returns list indices of free squares
+    lst = []
+    for i in range(len(k)):
+        if (k[i] == " "):
+            lst.append(i)
+    return (lst)
+
+
+# function which returns int if the given triplet has just one empty square
+
+def check_three_temp(a, b, c, d, j):
+    l = [j[a], j[b], j[c]]
+    k = [a, b, c]
+    if ((l.count(d) == 2) & (l.count(" ") == 1)):
+        return (k[l.index(" ")])
+
+
+def check_board_temp(board_temp):
+    i = 0
+    if (type(check_three_temp(0, 1, 2, xoro, board_temp)) == int):
+        i += 1
+    if (type(check_three_temp(3, 4, 5, xoro, board_temp)) == int):
+        i += 1
+    if (type(check_three_temp(6, 7, 8, xoro, board_temp)) == int):
+        i += 1
+    if (type(check_three_temp(0, 3, 6, xoro, board_temp)) == int):
+        i += 1
+    if (type(check_three_temp(1, 4, 7, xoro, board_temp)) == int):
+        i += 1
+    if (type(check_three_temp(2, 5, 8, xoro, board_temp)) == int):
+        i += 1
+    if (type(check_three_temp(0, 4, 8, xoro, board_temp)) == int):
+        i += 1
+    if (type(check_three_temp(2, 4, 6, xoro, board_temp)) == int):
+        i += 1
+    return (i)
+
+
+def avoid_trip():
+    board_temp2 = board
+    for i in free_squares(board_temp2):
+        board_temp2[i] == xoro
+        if (check_board_temp(board_temp2) > 1):
+            return (i)
+        board_temp2 = board
+
 # function which return the recommended move
+# this is where all the logic is built in
 # first priority is to complete triad and win
 # second priority is to save completion of enemy triad
 # third choice is random move
@@ -111,7 +155,15 @@ def next_move():
     # logic for special case of first corner move
     elif (([board[0], board[2], board[6], board[8]].count(xoro) == 1) & ([board[1], board[3], board[4], board[5], board[7]].count(" ") == 5)):
         return (4)
-
+    # logic for special case of first centere move
+    elif (board == [" ", " ", " ", " ", xoro, " ", " ", " ", " "]):
+        return(random.choice([0, 2, 6, 8]))
+    # logic for special case of first centere move
+    elif (([board[1], board[3], board[5], board[7]].count(xoro) == 1) & ([board[0], board[2], board[4], board[6], board[8]].count(" ") == 5)):
+        return(4)
+    # logic for avoiding double triplets of enemy
+    elif (type(avoid_trip()) == int):
+        return (avoid_trip())
     # Space for adding logic
 
     else:
@@ -121,10 +173,8 @@ def next_move():
                 l.append(i)
         return(random.choice(l))
 
-# function to conver user input to the board list index
 
-
-def convert(a):
+def convert(a):     # function to conver user input to the board list index
     if(a == "A1"):
         return(0)
     if(a == "B1"):
