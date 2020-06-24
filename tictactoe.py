@@ -6,7 +6,6 @@ print("Your turn first.")
 
 board = [" ", " ", " ", " ", " ", " ", " ", " ", " "]
 
-
 def print_board():      # function to print the board
     b = """
             A    B    C
@@ -25,7 +24,6 @@ def print_board():      # function to print the board
 # "O" if O has won
 # "tie" if game is a tie
 # 0 if game can continue
-
 
 def check_board():
     if ((board[0] == board[1] == board[2] == "X") or (board[0] == board[1] == board[2] == "O")):
@@ -47,10 +45,8 @@ def check_board():
     elif (" " not in board):
         return(0)
 
-# function to return opposite character of whatever the player has chosen
 
-
-def switch():
+def switch():   # function to return opposite character of whatever the player has chosen
     if (xoro == "X"):
         return("O")
     if (xoro == "O"):
@@ -67,7 +63,7 @@ def check_three(a, b, c, d):    # function which returns int if the given triple
 def free_squares(k):     # function which returns list of indices of free squares
     lst = []
     for i in range(len(k)):
-        if (k[i] == " "):
+        if ((k[i] == " ") & (i not in left)):
             lst.append(i)
     return (lst)
 
@@ -77,8 +73,8 @@ def check_three_temp(a, b, c, d, e):    # function which returns int if the give
     if ((l.count(d) == 2) & (l.count(" ") == 1)):
         return (k[l.index(" ")])
 
-def avoid_trip():
-    board_temp = board
+def avoid_trip2(p):
+    board_temp = p.copy()
     for i in free_squares(board_temp):
         board_temp[i] = xoro
         j = 0
@@ -101,7 +97,17 @@ def avoid_trip():
         if (j > 1):
             return(i)
         else:
-            board_temp = board
+            board_temp = p.copy()
+
+def avoid_trip():
+    for i in range(6):
+        if(type(avoid_trip2(board)) == int):
+            board_temp2 = board.copy()
+            board_temp2[avoid_trip2(board)] = switch()
+            if((type(avoid_trip2(board_temp2)) == int) == False):
+                return(avoid_trip2(board))
+            else:
+                left.append(avoid_trip2(board))
 
 # function which return the recommended move
 # this is where all the logic is built in
@@ -111,9 +117,21 @@ def avoid_trip():
 # fourth choice is to avoid double enemy triads
 # fifth choice is random move
 
+def special_case():
+    if ((board[4] == xoro) & ((board[0,1,2,3,6,7,8]).count(xoro) == 1)):
+        if (board[0] == "x"):
+            return(2)
+        if (board[0] == "x"):
+            return(2)
+        if (board[0] == "x"):
+            return(2)
+        if (board[0] == "x"):
+            return(2)
 
 def next_move():
     # logic to complete triplet first
+    global left
+    left = []
     if (type(check_three(0, 1, 2, switch())) == int):
         return (check_three(0, 1, 2, switch()))
     elif (type(check_three(3, 4, 5, switch())) == int):
@@ -153,12 +171,13 @@ def next_move():
     # logic for special case of first centere move
     elif (board == [" ", " ", " ", " ", xoro, " ", " ", " ", " "]):
         return(random.choice([0, 2, 6, 8]))
+    elif()
     # logic for special case of first edge move
     elif (([board[1], board[3], board[5], board[7]].count(xoro) == 1) & ([board[0], board[2], board[4], board[6], board[8]].count(" ") == 5)):
         return(4)
-    # logic for avoiding double triplets of enemy
-    #elif (type(avoid_trip()) == int):
-    #    return (avoid_trip())
+    # logic for avoiding double triplets of enemy 2 moves ahead
+    elif (type(avoid_trip()) == int):
+        return(avoid_trip())
     # Space for adding logic
 
     # logic for random move
@@ -199,6 +218,7 @@ while (True):
         print_board()
         print("Congratulations! You won :)")
         break
+
     board[next_move()] = switch()
     if (check_board() == switch()):
         print_board()
