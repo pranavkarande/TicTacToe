@@ -67,6 +67,13 @@ def free_squares(k):     # function which returns list of indices of free square
             lst.append(i)
     return (lst)
 
+def free_squares_temp(k):     # function which returns list of indices of free squares
+    lst = []
+    for i in range(len(k)):
+        if (k[i] == " "):
+            lst.append(i)
+    return (lst)
+
 def check_three_temp(a, b, c, d, e):    # function which returns int if the given triplet has just one empty square
     l = [e[a], e[b], e[c]]
     k = [a, b, c]
@@ -75,7 +82,33 @@ def check_three_temp(a, b, c, d, e):    # function which returns int if the give
 
 def avoid_trip2(p):
     board_temp = p.copy()
-    for i in free_squares(board_temp):
+    for i in free_squares_temp(board_temp):
+        board_temp[i] = xoro
+        j = 0
+        if (type(check_three_temp(0, 1, 2, xoro, board_temp)) == int):
+            j+=1
+        if (type(check_three_temp(3, 4, 5, xoro, board_temp)) == int):
+            j+=1
+        if (type(check_three_temp(6, 7, 8, xoro, board_temp)) == int):
+            j+=1
+        if (type(check_three_temp(0, 3, 6, xoro, board_temp)) == int):
+            j+=1
+        if (type(check_three_temp(1, 4, 7, xoro, board_temp)) == int):
+            j+=1
+        if (type(check_three_temp(2, 5, 8, xoro, board_temp)) == int):
+            j+=1
+        if (type(check_three_temp(0, 4, 8, xoro, board_temp)) == int):
+            j+=1
+        if (type(check_three_temp(2, 4, 6, xoro, board_temp)) == int):
+            j+=1
+        if ((j > 1) & (i not in left)):
+            return(i)
+        else:
+            board_temp = p.copy()
+
+def avoid_trip3(p):
+    board_temp = p.copy()
+    for i in free_squares_temp(board_temp):
         board_temp[i] = xoro
         j = 0
         if (type(check_three_temp(0, 1, 2, xoro, board_temp)) == int):
@@ -103,8 +136,8 @@ def avoid_trip():
     for i in range(6):
         if(type(avoid_trip2(board)) == int):
             board_temp2 = board.copy()
-            board_temp2[avoid_trip2(board)] = switch()
-            if((type(avoid_trip2(board_temp2)) == int) == False):
+            board_temp2[avoid_trip2(board_temp2)] = switch()
+            if((type(avoid_trip3(board_temp2)) == int) == False):
                 return(avoid_trip2(board))
             else:
                 left.append(avoid_trip2(board))
@@ -118,15 +151,15 @@ def avoid_trip():
 # fifth choice is random move
 
 def special_case():
-    if ((board[4] == xoro) & ((board[0,1,2,3,6,7,8]).count(xoro) == 1)):
-        if (board[0] == "x"):
+    if ((board[4] == xoro) & (([board[0], board[1], board[2], board[3], board[5], board[6], board[7], board[8]]).count(xoro) == 1)):
+        if (board[0] == xoro):
             return(2)
-        if (board[0] == "x"):
-            return(2)
-        if (board[0] == "x"):
-            return(2)
-        if (board[0] == "x"):
-            return(2)
+        if (board[2] == xoro):
+            return(8)
+        if (board[6] == xoro):
+            return(0)
+        if (board[8] == xoro):
+            return(6)
 
 def next_move():
     # logic to complete triplet first
@@ -171,7 +204,8 @@ def next_move():
     # logic for special case of first centere move
     elif (board == [" ", " ", " ", " ", xoro, " ", " ", " ", " "]):
         return(random.choice([0, 2, 6, 8]))
-    elif()
+    elif(type(special_case()) == int):
+        return(special_case())
     # logic for special case of first edge move
     elif (([board[1], board[3], board[5], board[7]].count(xoro) == 1) & ([board[0], board[2], board[4], board[6], board[8]].count(" ") == 5)):
         return(4)
