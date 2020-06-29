@@ -10,7 +10,7 @@ while(True):
 
     def print_board():      # function to print the board
         b = """
-                A    B    C
+              A    B    C
 
         1     {} |  {}  | {}
             ----+-----+----
