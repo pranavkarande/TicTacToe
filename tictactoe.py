@@ -142,13 +142,6 @@ def avoid_trip():
             else:
                 left.append(avoid_trip2(board))
 
-# function which return the recommended move
-# this is where all the logic is built in
-# first priority is to complete triad and win
-# second priority is to save completion of enemy triad
-# third choice are special cases
-# fourth choice is to avoid double enemy triads
-# fifth choice is random move
 
 def special_case():
     if ((board[4] == xoro) & (([board[0], board[1], board[2], board[3], board[5], board[6], board[7], board[8]]).count(xoro) == 1)):
@@ -160,6 +153,14 @@ def special_case():
             return(0)
         if (board[8] == xoro):
             return(6)
+
+# function which return the recommended move
+# this is where all the logic is built in
+# first priority is to complete triad and win
+# second priority is to save completion of enemy triad
+# third choice are special cases
+# fourth choice is to avoid double enemy triads
+# fifth choice is random move
 
 def next_move():
     # logic to complete triplet first
