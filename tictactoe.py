@@ -259,3 +259,5 @@ while (True):
         print_board()
         print("You lost :(")
         break
+
+input("Please press enter to exit.")
